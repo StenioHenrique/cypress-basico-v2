@@ -126,12 +126,52 @@ describe('Central de Atendimento ao Cliente TAT', function() {
     it('seleciona um arquivo da pasta fixtures', function(){
         cy.get('#file-upload')
           .selectFile('cypress/fixtures/example.json')
+          .then(input => { // = .should(function(input) { segue o que ta abaixo})
+              expect(input[0].files[0].name).to.equal('example.json')
+          })
+    })
+
+    it('seleciona um arquivo simulando um drag-and-drop', function(){
+        cy.get('#file-upload')
+          .selectFile('cypress/fixtures/example.json', { action: 'drag-drop'})
+          .then(input => { // = .should(function(input) { segue o que ta abaixo})
+              expect(input[0].files[0].name).to.equal('example.json')
+          })
+    })
+
+    it('seleciona um arquivo utilizando uma fixture para a qual foi dada um alias', function(){
+        cy.fixture('example.json').as('exampleFile')
+        cy.get('#file-upload')
+          .selectFile('@exampleFile')
           .then(input => { 
               expect(input[0].files[0].name).to.equal('example.json')
           })
     })
 
-    it.only('seleciona um arquivo simulando um drag-and-drop', function(){
-        
+    it('seleciona multiplos arquivos para upload', function() {
+        cy.get('#file-upload')
+        .selectFile([
+            'cypress/fixtures/example.json', 
+            'cypress/fixtures/example.txt'
+        ])
+        .then(input => {
+                expect(input[0].files[0].name).to.equal('example.json')
+                expect(input[0].files[1].name).to.equal('example.txt')
+
+        })
     })
+
+    it('verifica que a política de privacidade abre em outra aba sem a necessidade de um clique', function() {
+        cy.get('#privacy a').should('have.attr', 'target', '_blank')
+    })
+
+    it('acessa a página da política de privacidade removendo o target e então clicanco no link', function(){
+        cy.get('#privacy a')
+          .invoke('removeAttr', 'target')
+          .click()
+
+        cy.contains('Talking About Testing').should('be.visible')
+    })
+    
+
 })
