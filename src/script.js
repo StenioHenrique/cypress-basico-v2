@@ -4,7 +4,7 @@ const phoneLabelSpan = document.querySelector('.phone-label-span')
 const phoneField = document.getElementById('phone')
 
 document.querySelector('#phone-checkbox')
-  .addEventListener('', function() {
+  .addEventListener('change', function() {
     if (this.checked) {
       phoneLabelSpan.style.display = 'inline'
       phoneField.required = !isPhoneRequired
@@ -17,7 +17,7 @@ document.querySelector('#phone-checkbox')
   })
 
 document.querySelector('button[type="submit"]')
-  .addEventListener('', function(event) {
+  .addEventListener('click', function(event) {
     event.preventDefault()
     const firstNameField = document.getElementById('firstName')
     const lastNameField = document.getElementById('lastName')
